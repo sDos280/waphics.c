@@ -13,7 +13,7 @@ Waphics allows you to easily create video games in C and export them to the web 
 
 ```c
 #define WAPHICS_IMPLEMENTATION
-#include "../src/waphics.c"
+#include "src/waphics.c"
 
 #define WIDTH 1000
 #define HEIGHT 600
