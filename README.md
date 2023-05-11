@@ -11,7 +11,7 @@ Waphics allows you to easily create video games in C and export them to the web 
   <li>Alpha blending</li>
 </ul>
 
-```C
+```c
 #define WAPHICS_IMPLEMENTATION
 #include "../src/waphics.c"
 
