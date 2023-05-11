@@ -13,7 +13,7 @@ Waphics allows you to easily create video games in C and export them to the web 
 
 ```C
 #define WAPHICS_IMPLEMENTATION
-#include "src/waphics.c"
+#include "../src/waphics.c"
 
 #define WIDTH 1000
 #define HEIGHT 600
@@ -22,18 +22,18 @@ uint32_t pixels[WIDTH * HEIGHT];
 Surface display;
 
 void init(void) {
-    display = SCREEN(pixels, WIDTH, HEIGHT);
+    display = SURFACE(pixels, WIDTH, HEIGHT);
 }
 
-static int x;
+int x;
 
-uint32_t *run(void) {
-    //fill the display with black
+uint32_t *render(void) {
+    // fill the display with black
     waphics_fill_display(display, RGB(0, 0, 0));
-    //draw a red rectangle
-    waphics_draw_rect(display, RECT(0, 0, 50, 50), RGB(255, 0, 0));
-    //draw a blue circle
-    waphics_draw_circle(display, CIRCLE(100, 100, 50), RGB(0, 100, 100));
+    // draw a red rectangle
+    waphics_draw_rect(display, RECT(x, 0, 50, 50), RGB(255, 0, 0));
+    // draw a blue circle
+    waphics_draw_circle(display, CIRCLE(x, 120, 50), RGB(0, 100, 100));
 
     if (get_key(KEY_D)) x+=10;
     if (get_key(KEY_A)) x-=10;

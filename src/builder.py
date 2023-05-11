@@ -45,8 +45,41 @@ else:
 emcc_command = f"emcc {file_c_path} -sEXPORTED_FUNCTIONS=_render,_init -sEXPORTED_RUNTIME_METHODS=ccall"
 output_html = f"<script src='a.out.js'></script><script>\nlet width = {width};\nlet height = {height};\nlet channels = 4;\n</script><canvas id='canvas' width={width} height={height}></canvas><script src='waphics.js'></script>"
 
-with open(WAPHICS_C_HOME / 'src/waphics.js', 'r') as reader_waphics_js:
-    waphics_js = reader_waphics_js.read()
+waphics_js = """
+for (let i = 0; i < 24; i++) {
+    Module[97 + i] = 0;
+}
+
+function down(e) {
+    Module[e.keyCode] = 1;
+}
+
+function up(e) {
+    Module[e.keyCode] = 0;
+}
+
+document.addEventListener("keydown", down);
+document.addEventListener("keyup", up);
+
+function _render() {        
+    var c = document.getElementById("canvas" ,{"alpha": false});
+    var ctx = c.getContext("2d");
+    let pixels = Module.ccall('render', // name of C function 
+        "number", // return type
+        null, // argument types
+        null // arguments
+    );
+    var buffer = new Uint8ClampedArray(Module.HEAPU8.buffer, pixels, width*height*channels);
+    var img = new ImageData(buffer, width);   
+    ctx.putImageData(img, 0, 0);
+    window.requestAnimationFrame(_render);
+    Module["key"] = null;
+}
+
+Module.onRuntimeInitialized = () => {
+    Module.ccall("init");
+    window.requestAnimationFrame(_render);
+}"""
 
 # output stuff
 with open(file_c_path.parent / 'waphics.js', 'w') as writer:
