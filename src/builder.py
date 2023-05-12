@@ -45,7 +45,8 @@ else:
 # check if the system has Emscripten
 if os.environ.get('EMSDK') is None:
     print("EMSDK isn't found, please check Emscripten path")
-    
+    exit(1)
+
 emcc_command = f"emcc {file_c_path} -sEXPORTED_FUNCTIONS=_render,_init -sEXPORTED_RUNTIME_METHODS=ccall"
 output_html = f"<script src='a.out.js'></script><script>\nlet width = {width};\nlet height = {height};\nlet channels = 4;\n</script><canvas id='canvas' width={width} height={height}></canvas><script src='waphics.js'></script>"
 
